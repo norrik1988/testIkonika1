@@ -82,6 +82,30 @@ function getPokemonForEachTrainer() {
         });
     });
 }
+function getPokeshopAll() {
+    return new Promise((resolve, reject) => {
+        pool.connect((err, pg, release) => {
+            if (err) {
+                release();
+                return reject(err);
+            }
+            if (!pg) {
+                release();
+                return reject(new Error('Client non definito'));
+            }
+            if (pg) {
+                pg.query(`select 
+                        * from pokeshop`, (err, pokeshop) => {
+                    release();
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(pokeshop.rows);
+                });
+            }
+        });
+    });
+}
 // // provaPromise()
 // // .then(res => console.log(res))
 // // .catch(err => console.log(err))
@@ -119,7 +143,7 @@ function getPokemonForEachTrainer() {
 //     const verifica = false
 //     const promise = new Promise ((resolve, reject) => {
 //         if(verifica){
-//             let x = 1
+//             let x = 1 
 //             let y = 22
 //             let somma = setTimeout( ()=> {
 //                 resolve(x+y)
@@ -174,6 +198,11 @@ async function main() {
         console.log(allenatore.length ? allenatore[0] : 'Nessun allenatore trovato');
         const pokemonForEachTrainer = await getPokemonForEachTrainer();
         console.log(pokemonForEachTrainer);
+        const stringa1 = 'Aversa';
+        const pokeshopGroup = await getPokeshopAll();
+        for (let pokeshop of pokeshopGroup) {
+            stringa1 === pokeshop.nome_shop ? console.log(pokeshop.id, pokeshop.nome_shop) : 'pokeshop non trovato';
+        }
     }
     catch (error) {
         console.log("L'errore è:", error);
