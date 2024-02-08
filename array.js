@@ -46,3 +46,24 @@ console.log(copia);
 //   { nome: "Giovanni", cognome: "Bianchi", età: 35 },
 //   { nome: "Paola", cognome: "Neri", età: 40 }
 // ]
+
+// Dichiarazione dell'array iniziale
+let cibo = ['pizza', 'hamburger', 'insalata'];
+
+// Aggiunge un nuovo elemento alla fine dell'array (push)
+cibo.push('gelato');
+console.log(cibo); // Output: ['pizza', 'hamburger', 'insalata', 'gelato']
+
+// Rimuove l'ultimo elemento dall'array (pop)
+const ultimoElemento = cibo.pop();
+console.log(cibo); // Output: ['pizza', 'hamburger', 'insalata']
+console.log("Elemento rimosso:", ultimoElemento); // Output: gelato
+
+// Rimuove il primo elemento dall'array (shift)
+const primoElemento = cibo.shift();
+console.log(cibo); // Output: ['hamburger', 'insalata']
+console.log("Elemento rimosso:", primoElemento); // Output: pizza
+
+// Aggiunge un nuovo elemento all'inizio dell'array (unshift)
+cibo.unshift('sushi');
+console.log(cibo); // Output: ['sushi', 'hamburger', 'insalata']
