@@ -72,9 +72,9 @@ function getAllenatoreById(id_allenatore:number){
                     return reject(new Error('Client non definito'))
                 }
                 if (pg) {
-                    pg.query(`select 
-                    p.nome_pokemon, a.nome_allenatore 
-                    from pokemon p 
+                    pg.query(`select
+                    p.nome_pokemon, a.nome_allenatore
+                    from pokemon p
                     join allenatori a
                     on p.id_allenatore = a.id`, (err, allenatore) =>{
                         release()
@@ -101,7 +101,7 @@ function getAllenatoreById(id_allenatore:number){
                         return reject(new Error('Client non definito'))
                     }
                     if (pg) {
-                        pg.query(`select 
+                        pg.query(`select
                         * from pokeshop`, (err, pokeshop) =>{
                             release()
                             if(err){
@@ -114,6 +114,31 @@ function getAllenatoreById(id_allenatore:number){
                 })
             }
 
+            function getPokemonAll (){
+
+                return new Promise((resolve, reject) => {
+                    pool.connect((err, pg, release) => {
+                        if (err) {
+                            release()
+                            return reject(err)
+                        }
+                        if (!pg){
+                            release()
+                            return reject(new Error('Client non definito'))
+                        }
+                        if (pg) {
+                            pg.query(`select
+                            * from pokemon where pokemon.data_acquisto is not null`, (err, pokemon) =>{
+                                release()
+                                if(err){
+                                    return reject(err)
+                                }
+                                    resolve(pokemon.rows)
+                                })
+                            }
+                        })
+                    })
+                }
 
 // // provaPromise()
 // // .then(res => console.log(res))
@@ -128,7 +153,7 @@ function getAllenatoreById(id_allenatore:number){
 //             let somma = setTimeout( ()=> {
 //                 resolve(x+y)
 
-//             }, 2000) 
+//             }, 2000)
 
 //         } else {
 //             reject(new Error('verifica 2 è false'))
@@ -145,7 +170,7 @@ function getAllenatoreById(id_allenatore:number){
 //             let somma = setTimeout( ()=> {
 //                 resolve(x+y)
 
-//             }, 2000) 
+//             }, 2000)
 
 //         } else {
 //             reject(new Error('verifica 3 è false'))
@@ -157,12 +182,12 @@ function getAllenatoreById(id_allenatore:number){
 //     const verifica = false
 //     const promise = new Promise ((resolve, reject) => {
 //         if(verifica){
-//             let x = 1 
+//             let x = 1
 //             let y = 22
 //             let somma = setTimeout( ()=> {
 //                 resolve(x+y)
 
-//             }, 2000) 
+//             }, 2000)
 
 //         } else {
 //             reject(new Error('verifica 4 è false'))
@@ -179,7 +204,7 @@ function getAllenatoreById(id_allenatore:number){
 //         console.log(res3)
 //         prova4().then(res4 => {
 //             console.log(res4)
-    
+
 //         })
 //     })
 
@@ -205,7 +230,7 @@ function getAllenatoreById(id_allenatore:number){
 //     console.log('uscita')
 
 
-// } 
+// }
 
 main()
 
@@ -229,13 +254,13 @@ async function main() {
         for(let allenatore of allenatori) {
             console.log("ID:" + allenatore.id, "nome:" + allenatore.nome_allenatore, "città:" + allenatore.città )
         }
-  
+
         const allenatore_id = 1
         const allenatore:any = await getAllenatoreById(allenatore_id)
         console.log( allenatore.length ? allenatore[0] : 'Nessun allenatore trovato')
 
 
-        const pokemonForEachTrainer: any = await getPokemonForEachTrainer() 
+        const pokemonForEachTrainer: any = await getPokemonForEachTrainer()
         console.log(pokemonForEachTrainer)
 
         const stringa1: string = 'Aversa'
@@ -243,7 +268,47 @@ async function main() {
         for ( let pokeshop of pokeshopGroup) {
             stringa1 === pokeshop.nome_shop? console.log(pokeshop.id, pokeshop.nome_shop) : 'pokeshop non trovato';
         }
-       
+
+        const date1 = new Date (2024,0,1)
+        const pokemonGetAll: any = await getPokemonAll()
+        console.log(date1)
+        for ( let pokemon of pokemonGetAll) {
+
+           // console.log(date1.getFullYear())
+            //  console.log(date1.getFullYear())
+            //  console.log(date1.getMonth())
+            //  console.log(date1.getDate())
+
+            // console.log(pokemon.data_acquisto.getFullYear())
+            // console.log(pokemon.data_acquisto.getMonth())
+            // console.log(pokemon.data_acquisto.getDate())
+
+            
+
+            if (date1.getFullYear() === pokemon.data_acquisto.getFullYear() &&
+            (date1.getMonth() === pokemon.data_acquisto.getMonth())&&
+            (date1.getDate()===pokemon.data_acquisto.getDate())) {
+                console.log(pokemon.nome_pokemon) 
+            } else
+            {
+                console.log("error");
+                
+            }
+
+            // if(date1.getFullYear === pokemon.data_acquisto.getFullYear() &&
+            // date1.getMonth === pokemon.data_acquisto.getMonth() && 
+            // date1.getDate === pokemon.data_acquisto.getDate()  ) {
+            //     console.log (pokemon.nome_pokemon)
+            // } 
+            // else {
+            //     console.log('error')
+            // }
+            // console.log('ciao')
+            // date1 == pokemon.data_acquisto? console.log(pokemon.id, pokemon.nome_pokemon) : 'pokemon non trovato per data di acquisto selezionato';
+        }
+
+
+
 
 
     } catch (error) {

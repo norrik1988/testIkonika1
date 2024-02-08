@@ -67,9 +67,9 @@ function getPokemonForEachTrainer() {
                 return reject(new Error('Client non definito'));
             }
             if (pg) {
-                pg.query(`select 
-                    p.nome_pokemon, a.nome_allenatore 
-                    from pokemon p 
+                pg.query(`select
+                    p.nome_pokemon, a.nome_allenatore
+                    from pokemon p
                     join allenatori a
                     on p.id_allenatore = a.id`, (err, allenatore) => {
                     release();
@@ -94,13 +94,37 @@ function getPokeshopAll() {
                 return reject(new Error('Client non definito'));
             }
             if (pg) {
-                pg.query(`select 
+                pg.query(`select
                         * from pokeshop`, (err, pokeshop) => {
                     release();
                     if (err) {
                         return reject(err);
                     }
                     resolve(pokeshop.rows);
+                });
+            }
+        });
+    });
+}
+function getPokemonAll() {
+    return new Promise((resolve, reject) => {
+        pool.connect((err, pg, release) => {
+            if (err) {
+                release();
+                return reject(err);
+            }
+            if (!pg) {
+                release();
+                return reject(new Error('Client non definito'));
+            }
+            if (pg) {
+                pg.query(`select
+                            * from pokemon where pokemon.data_acquisto is not null`, (err, pokemon) => {
+                    release();
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(pokemon.rows);
                 });
             }
         });
@@ -117,7 +141,7 @@ function getPokeshopAll() {
 //             let y = 22
 //             let somma = setTimeout( ()=> {
 //                 resolve(x+y)
-//             }, 2000) 
+//             }, 2000)
 //         } else {
 //             reject(new Error('verifica 2 è false'))
 //         }
@@ -132,7 +156,7 @@ function getPokeshopAll() {
 //             let y = 22
 //             let somma = setTimeout( ()=> {
 //                 resolve(x+y)
-//             }, 2000) 
+//             }, 2000)
 //         } else {
 //             reject(new Error('verifica 3 è false'))
 //         }
@@ -143,11 +167,11 @@ function getPokeshopAll() {
 //     const verifica = false
 //     const promise = new Promise ((resolve, reject) => {
 //         if(verifica){
-//             let x = 1 
+//             let x = 1
 //             let y = 22
 //             let somma = setTimeout( ()=> {
 //                 resolve(x+y)
-//             }, 2000) 
+//             }, 2000)
 //         } else {
 //             reject(new Error('verifica 4 è false'))
 //         }
@@ -177,7 +201,7 @@ function getPokeshopAll() {
 //         console.log(error)
 //     }
 //     console.log('uscita')
-// } 
+// }
 main();
 async function main() {
     try {
@@ -202,6 +226,36 @@ async function main() {
         const pokeshopGroup = await getPokeshopAll();
         for (let pokeshop of pokeshopGroup) {
             stringa1 === pokeshop.nome_shop ? console.log(pokeshop.id, pokeshop.nome_shop) : 'pokeshop non trovato';
+        }
+        const date1 = new Date(2024, 0, 10);
+        const pokemonGetAll = await getPokemonAll();
+        console.log(date1);
+        for (let pokemon of pokemonGetAll) {
+            // console.log(date1.getFullYear())
+            //  console.log(date1.getFullYear())
+            //  console.log(date1.getMonth())
+            //  console.log(date1.getDate())
+            // console.log(pokemon.data_acquisto.getFullYear())
+            // console.log(pokemon.data_acquisto.getMonth())
+            // console.log(pokemon.data_acquisto.getDate())
+            if (date1.getFullYear() === pokemon.data_acquisto.getFullYear() &&
+                (date1.getMonth() === pokemon.data_acquisto.getMonth()) &&
+                (date1.getDate() === pokemon.data_acquisto.getDate())) {
+                console.log(pokemon.nome_pokemon);
+            }
+            else {
+                console.log("error");
+            }
+            // if(date1.getFullYear === pokemon.data_acquisto.getFullYear() &&
+            // date1.getMonth === pokemon.data_acquisto.getMonth() && 
+            // date1.getDate === pokemon.data_acquisto.getDate()  ) {
+            //     console.log (pokemon.nome_pokemon)
+            // } 
+            // else {
+            //     console.log('error')
+            // }
+            // console.log('ciao')
+            // date1 == pokemon.data_acquisto? console.log(pokemon.id, pokemon.nome_pokemon) : 'pokemon non trovato per data di acquisto selezionato';
         }
     }
     catch (error) {
