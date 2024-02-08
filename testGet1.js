@@ -227,7 +227,7 @@ async function main() {
         for (let pokeshop of pokeshopGroup) {
             stringa1 === pokeshop.nome_shop ? console.log(pokeshop.id, pokeshop.nome_shop) : 'pokeshop non trovato';
         }
-        const date1 = new Date(2024, 0, 10);
+        const date1 = new Date(2024, 0, 1);
         const pokemonGetAll = await getPokemonAll();
         console.log(date1);
         for (let pokemon of pokemonGetAll) {
